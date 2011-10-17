@@ -1,0 +1,175 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include <windows.h>
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+#define IDC_STATIC -1
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "#include <windows.h>\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG1 DIALOG DISCARDABLE  0, 0, 231, 121
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "OK",IDC_OK,105,98,55,15
+    PUSHBUTTON      "Cancel",IDC_CANCEL,168,98,55,15
+    CONTROL         "Enable Null Frames",IDC_NULLFRAMES,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,11,77,10
+    CONTROL         "Always Suggest RGB for Output",IDC_SUGGEST,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,31,117,10
+    PUSHBUTTON      "View Homepage",IDC_HOMEPAGE,20,98,60,15
+#ifdef X64_BUILD
+    LTEXT           "Version 1.3.25 (64 Bit)",IDC_VERSION,160,0,100,10
+#else
+	LTEXT			"Version 1.3.25",IDC_VERSION,185,0,100,10
+#endif
+    CONTROL         "Use Multithreading",IDC_MULTI,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,51,75,10
+    COMBOBOX        IDC_LOSSY_OPTIONS,132,25,90,84,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Mode",IDC_STATIC,132,13,41,11
+    CONTROL         "Prevent Upsampling When Decoding",IDC_NOUPSAMPLE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,72,129,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO MOVEABLE PURE 
+BEGIN
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        BOTTOMMARGIN, 113
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,3,25,0
+ PRODUCTVERSION 1,3,25,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", " \0"
+            VALUE "FileDescription", "Lagarith\0"
+            VALUE "FileVersion", "1.3.25\0"
+            VALUE "InternalName", "Lagarith\0"
+            VALUE "LegalCopyright", "Copyright © 2011\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "lagarith.dll\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "Lagarith\0"
+            VALUE "ProductVersion", "1.3.25\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TIP_NULLFRAMES      "When a frame is identical to the preceding frame, it can be replaced with a nullframe. This indicates that the program reading the video should simply reuse the previous frame. Nullframes can increase compression and speed, but there may be a few editing programs that do no handle them well; disable nullframes if you notice the wrong frame being displayed during still sections of a video."
+    IDS_TIP_SUGGEST         "If this enabled, Lagarith will always attempt to decode video to RGB, unless explicitly asked otherwise. If a program will not accept video compressed with Lagarith, this may fix the problem."
+    IDS_TIP_MULTI           "Use multiple threads to compress/decompress video; this can improve speed on systems that have multiple processors.\nSingle processor systems should leave this disabled."
+    IDS_TIP_INTERLACED      " "
+    IDS_TIP_LOSSY_OPTION    "This allows the user to downsample video before it is compressed. Selecting a colorspace will force all colorspaces above it to be downsampled; lower colorspaces will not be affected. Downsampling is somewhat lossy."
+    IDS_TIP_NOUPSAMPLE		"This will force the codec to decode video as the same colorspace it is stored as internally. This can improve performance and prevent rounding errors, but may not be compatible with certain programs."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

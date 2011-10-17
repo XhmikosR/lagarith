@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lagarith", "lagarith.vcxproj", "{7D103DE4-2A83-40BE-960A-F07E8F3F2419}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug64|Win32 = Debug64|Win32
+		Release|Win32 = Release|Win32
+		Release64|Win32 = Release64|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Debug|Win32.Build.0 = Debug|Win32
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Debug64|Win32.ActiveCfg = Debug64|Win32
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Debug64|Win32.Build.0 = Debug64|Win32
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Release|Win32.ActiveCfg = Release|Win32
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Release|Win32.Build.0 = Release|Win32
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Release64|Win32.ActiveCfg = Release64|Win32
+		{7D103DE4-2A83-40BE-960A-F07E8F3F2419}.Release64|Win32.Build.0 = Release64|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
