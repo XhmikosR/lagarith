@@ -17,12 +17,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cursor2.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="cursor3.cur">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="huffyuv.def" />
   </ItemGroup>
   <ItemGroup>

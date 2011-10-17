@@ -71,10 +71,6 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Configuration)\$(Platform)\obj\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</PostBuildEventUseInBuild>
-    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</PostBuildEventUseInBuild>
-    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PostBuildEventUseInBuild>
-    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -98,10 +94,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Message>- Copying to Drivers -</Message>
-      <Command>copy "$(TargetPath)" "%WINDIR%\system32"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -123,10 +115,6 @@
       <ModuleDefinitionFile>huffyuv.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Message>- Copying to Drivers -</Message>
-      <Command>copy "$(TargetPath)" "%WINDIR%\system32"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -145,7 +133,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalOptions>/filealign:512 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>ComCtl32.Lib;WinMM.Lib;huffyuv_a.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>huffyuv.def</ModuleDefinitionFile>
@@ -155,10 +142,6 @@
       <LargeAddressAware>true</LargeAddressAware>
       <SetChecksum>true</SetChecksum>
     </Link>
-    <PostBuildEvent>
-      <Message>- Copying to Drivers -</Message>
-      <Command>copy "$(TargetPath)" "%WINDIR%\system32"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -176,7 +159,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalOptions>/filealign:512 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>ComCtl32.Lib;WinMM.Lib;convert.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>huffyuv.def</ModuleDefinitionFile>
@@ -184,18 +166,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <SetChecksum>true</SetChecksum>
     </Link>
-    <PostBuildEvent>
-      <Message>- Copying to Drivers -</Message>
-      <Command>copy "$(TargetPath)" "%WINDIR%\system32"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="config.rc">
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cursor2.cur" />
-    <None Include="cursor3.cur" />
     <None Include="huffyuv.def" />
   </ItemGroup>
   <ItemGroup>
