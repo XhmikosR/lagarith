@@ -1,0 +1,46 @@
+This document explains what the various settings for Lagarith do in
+greater detail than the tool tips. In general though, leaving the
+
+Enable Null Frames: A null frame is a special type of frame that is 0 byte
+in size. This tells the program reading the video to simply reuse the
+previous frame again. Null frames are a special case of delta frames, and
+some programs may not handle them well. If you see the wrong frame being
+decoded in a video, disabling null frames should fix this in future
+encodings. Leaving null frames enabled can improve compression and speed
+for videos that have identical frames.
+
+Always Suggest RGB: This option tells Lagarith to always attempt to decode
+video to RGB unless explicitly asked otherwise. If a program cannot open
+files compressed with Lagarith that work in other programs, checking this
+box may fix the problem.
+
+Use Multithreading: This allows Lagarith to encode and decode the color
+channels in a video in parallel. On a system that has multiple processors,
+this can speed up encoding and decoding. Enabling this option on a
+Hyperthreaded system appears to offer no significant speed increase, and
+enabling it on a single processor system may slow down Lagarith by a
+slight amount.
+
+Mode: This allows the user to select the highest colorspace that Lagarith
+can use internally. Setting the mode to RGBA will cause Lagarith to
+use whatever colorspace the input video is. Setting it to RGB (Default)
+will cause Lagarith to process YV12, YUY2, and RGB normally, while RGBA
+video will be converted to RGB. Setting it to YUY2 will cause both RGB
+and RGBA to be converted to YUY2, while YV12 will be processed unchanged.
+Setting the mode to YV12 forces RGBA, RGB, and YUY2 to be converted to
+YV12 before compression. Finally, Reduced Resolution converts all video
+to YV12 and then halves the resolution internally; this is very lossy and
+intended for "bait and switch" editing.
+
+One final note about RGB/RGBA: RGB comes in two flavors - 24 bit RGB and
+32 bit RGB. 32 bit RGB does not have any more information than RGB24, it
+simply has an extra byte with some unknown value after each pixel.
+This makes sure that all pixels start on a memory address that is a
+multiple of 4, which is very good for MMX/SSE optimizations. The format for
+RGBA is identical to RGB 32; the only difference is that in RGBA, the 4th
+byte contains useful information, while in RGB32 the value is meaningless
+and should be discarded by the codec. Thus, the codec should only be set to
+RGBA when you are encoding video that has an alpha channel you want
+preserved, since applications may output RGB as RGB32. If Lagarith
+is set to RGBA and given RGB32 video, Lagarith will waste time and disk
+space by preserving the value of the padding byte instead of discarding it.
