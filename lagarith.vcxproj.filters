@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{442b50fe-9886-409b-81a8-885607192143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{b89cd714-3916-437a-8ea3-b70cd5b6cee4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="config.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cursor2.cur">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="cursor3.cur">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="huffyuv.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="compact.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="convert.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="convert_xvid.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="convert_yv12.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="huffyuv_a.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="interface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="lagarith.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="prediction.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="convert_lagarith.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Fibonacci.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="threading.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zerorle.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="compact.cpp" />
+    <ClCompile Include="compact_old.cpp" />
+    <ClCompile Include="compression.cpp" />
+    <ClCompile Include="decompression.cpp" />
+    <ClCompile Include="drvproc.cpp" />
+    <ClCompile Include="fibonacci.cpp" />
+    <ClCompile Include="interface.cpp" />
+    <ClCompile Include="prediction.cpp" />
+    <ClCompile Include="prediction_x86.cpp" />
+    <ClCompile Include="range.cpp" />
+    <ClCompile Include="threading.cpp" />
+    <ClCompile Include="zerorle.cpp" />
+    <ClCompile Include="convert_lagarith.cpp" />
+  </ItemGroup>
+</Project>
