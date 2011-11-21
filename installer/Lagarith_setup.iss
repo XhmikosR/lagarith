@@ -30,28 +30,26 @@ VersionInfoProductTextVersion={#LAG_VERSION}
 DefaultDirName={pf}\Lagarith Lossless Codec
 AppReadmeFile={app}\ReadMe.txt
 InfoBeforeFile=copying.txt
-AlwaysShowComponentsList=false
-ShowComponentSizes=false
-FlatComponentsList=false
 OutputDir=.
 OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}
-UninstallDisplayName=Lagarith Lossless Codec ({#LAG_VERSION})
-UninstallFilesDir={app}
+UninstallDisplayName=Lagarith Lossless Codec [{#LAG_VERSION}]
 MinVersion=0,5.1
 SolidCompression=yes
 Compression=lzma/ultra64
+InternalCompressLevel=max
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 DisableReadyPage=yes
+AllowCancelDuringInstall=no
 ArchitecturesInstallIn64BitMode=x64
 
 
 [Files]
-Source: ..\Release\Win32\lagarith.dll; DestDir: {sys}; Flags: ignoreversion restartreplace 32bit
-Source: ..\Release\x64\lagarith.dll;   DestDir: {sys}; Flags: ignoreversion restartreplace 64bit; Check: Is64BitInstallMode()
-Source: copying.txt;                   DestDir: {app}; Flags: ignoreversion restartreplace
-Source: settings.txt;                  DestDir: {app}; Flags: ignoreversion restartreplace
-Source: ReadMe.txt;                    DestDir: {app}; Flags: ignoreversion restartreplace
+Source: ..\src\Release\Win32\lagarith.dll; DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 32bit
+Source: ..\src\Release\x64\lagarith.dll;   DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 64bit; Check: Is64BitInstallMode()
+Source: copying.txt;                       DestDir: {app}; Flags: ignoreversion
+Source: settings.txt;                      DestDir: {app}; Flags: ignoreversion
+Source: ReadMe.txt;                        DestDir: {app}; Flags: ignoreversion
 
 
 [Registry]
@@ -61,8 +59,8 @@ Root: HKLM;   Subkey: SYSTEM\CurrentControlSet\Control\MediaResources\icm\VIDC.L
 Root: HKLM;   Subkey: SYSTEM\CurrentControlSet\Control\MediaResources\icm\VIDC.LAGS; ValueType: string; ValueName: FriendlyName; ValueData: Lagarith lossless codec [LAGS]; Flags: uninsdeletevalue
 Root: HKLM;   Subkey: SOFTWARE\Microsoft\Windows NT\CurrentVersion\drivers.desc;     ValueType: string; ValueName: lagarith.dll; ValueData: Lagarith lossless codec [LAGS]; Flags: uninsdeletevalue
 Root: HKLM;   Subkey: SOFTWARE\Microsoft\Windows NT\CurrentVersion\Drivers32;        ValueType: string; ValueName: VIDC.LAGS;    ValueData: lagarith.dll;                   Flags: uninsdeletevalue
-Root: HKLM64; Subkey: Software\Microsoft\Windows NT\CurrentVersion\drivers.desc;     ValueType: string; ValueName: lagarith.dll; ValueData: Lagarith lossless codec [LAGS]; Flags: uninsdeletevalue; Check: Is64BitInstallMode()
-Root: HKLM64; Subkey: Software\Microsoft\Windows NT\CurrentVersion\Drivers32;        ValueType: string; ValueName: VIDC.LAGS;    ValueData: lagarith.dll;                   Flags: uninsdeletevalue; Check: Is64BitInstallMode()
+Root: HKLM64; Subkey: SOFTWARE\Microsoft\Windows NT\CurrentVersion\drivers.desc;     ValueType: string; ValueName: lagarith.dll; ValueData: Lagarith lossless codec [LAGS]; Flags: uninsdeletevalue; Check: Is64BitInstallMode()
+Root: HKLM64; Subkey: SOFTWARE\Microsoft\Windows NT\CurrentVersion\Drivers32;        ValueType: string; ValueName: VIDC.LAGS;    ValueData: lagarith.dll;                   Flags: uninsdeletevalue; Check: Is64BitInstallMode()
 
 
 [INI]
@@ -74,19 +72,18 @@ Filename: {#WEBPAGE}; Description: Visit Webpage; Flags: nowait postinstall skip
 
 
 [Code]
+function IsUpgrade(): Boolean;
 var
-  is_update: Boolean;
-
-
-function IsUpdate(): Boolean;
+  sPrevPath: String;
 begin
-  Result := is_update;
+  sPrevPath := WizardForm.PrevAppDir;
+  Result := (sPrevPath <> '');
 end;
 
 
 function ShouldSkipPage(PageID: Integer): Boolean;
 begin
-  if IsUpdate then begin
+  if IsUpgrade() then begin
     Case PageID of
       // Hide the license page
       wpInfoBefore: Result := True;
@@ -100,34 +97,29 @@ end;
 
 procedure CurPageChanged(CurPageID: Integer);
 begin
-  if IsUpdate AND (CurPageID = wpWelcome) then
+  if IsUpgrade() and (CurPageID = wpWelcome) then
     WizardForm.NextButton.Caption := SetupMessage(msgButtonInstall)
   else if CurPageID = wpInfoBefore then
     WizardForm.NextButton.Caption := SetupMessage(msgButtonInstall)
   else if CurPageID = wpFinished then
     WizardForm.NextButton.Caption := SetupMessage(msgButtonFinish)
-  else if IsUpdate then
+  else if IsUpgrade() then
     WizardForm.NextButton.Caption := SetupMessage(msgButtonNext);
 end;
 
 
-Procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
-  // When uninstalling ask user to delete lagarith INI file based on whether this file exists
+  // When uninstalling ask user to delete Lagarith settings
   if CurUninstallStep = usUninstall then begin
     if RegKeyExists(HKEY_CURRENT_USER, 'Software\Lagarith') then begin
-      if MsgBox(ExpandConstant('Do you also want to delete Lagarith settings? If you plan on reinstalling Lagarith you do not have to delete them.'),
-       mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then begin
-         DeleteFile(ExpandConstant('{win}\lagarith.ini'));
+      if SuppressibleMsgBox('Do you also want to delete Lagarith settings? If you plan on reinstalling Lagarith you do not have to delete them.',
+        mbConfirmation, MB_YESNO or MB_DEFBUTTON2, IDNO) = IDYES then begin
          RegDeleteKeyIncludingSubkeys(HKCU, 'Software\Lagarith');
       end;
     end;
+    // Always delete the old settings
+    DeleteFile(ExpandConstant('{win}\lagarith.ini'));
   end;
 end;
 
-
-function InitializeSetup(): Boolean;
-begin
-  is_update := RegKeyExists(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{F59AC46C-10C3-4023-882C-4212A92283B3}_is1');
-  Result := True;
-end;

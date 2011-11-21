@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lagarith", "lagarith.vcxproj", "{7D103DE4-2A83-40BE-960A-F07E8F3F2419}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lagarith", "src\lagarith.vcxproj", "{7D103DE4-2A83-40BE-960A-F07E8F3F2419}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

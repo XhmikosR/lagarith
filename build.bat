@@ -109,3 +109,15 @@ ECHO WARNING: "%~nx0 x86" or "%~nx0 x64" won't work.
 ECHO.
 ENDLOCAL
 EXIT /B
+
+
+:SUBMSG
+ECHO. & ECHO ______________________________
+ECHO [%~1] %~2
+ECHO ______________________________ & ECHO.
+IF /I "%~1" == "ERROR" (
+  PAUSE
+  EXIT
+) ELSE (
+  EXIT /B
+)
