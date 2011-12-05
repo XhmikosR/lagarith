@@ -120,9 +120,9 @@ int ObsoleteDeRLEZero( unsigned char * in, unsigned char * out, int length,int l
 void ObsoleteDecode(const unsigned char *xin, unsigned char *xout, int length, unsigned int * ranges, int scale){
 
 	xin++;
-	const unsigned int Top_value = 0x80000000;
+	//const unsigned int Top_value = 0x80000000;
 	const unsigned int Bottom_value = 0x00800000;
-	const unsigned int Shift_bits = 23;
+	//const unsigned int Shift_bits = 23;
 	const unsigned int Extra_bits = 7;
 
 	unsigned int buffer = (*xin++);

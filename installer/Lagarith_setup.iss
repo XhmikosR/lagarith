@@ -1,3 +1,5 @@
+;#define ICL12
+
 #define LAG_VERSION       "1.3.26"
 #define LAG_VERSION_SHORT "1326"
 #define PUBLISHER         "Ben Greenwood"
@@ -5,6 +7,13 @@
 
 #if VER < 0x05040200
   #error Update your Inno Setup version
+#endif
+
+
+#ifdef ICL12
+  #define bindir "..\src\ICL12"
+#else
+  #define bindir "..\src\VS2010"
 #endif
 
 
@@ -28,10 +37,13 @@ VersionInfoProductName=Lagarith Lossless Codec
 VersionInfoProductVersion={#LAG_VERSION}
 VersionInfoProductTextVersion={#LAG_VERSION}
 DefaultDirName={pf}\Lagarith Lossless Codec
-AppReadmeFile={app}\ReadMe.txt
 InfoBeforeFile=copying.txt
 OutputDir=.
+#ifdef ICL12
+OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}_ICL12
+#else
 OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}
+#endif
 UninstallDisplayName=Lagarith Lossless Codec [{#LAG_VERSION}]
 MinVersion=0,5.1
 SolidCompression=yes
@@ -45,11 +57,10 @@ ArchitecturesInstallIn64BitMode=x64
 
 
 [Files]
-Source: ..\src\Release\Win32\lagarith.dll; DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 32bit
-Source: ..\src\Release\x64\lagarith.dll;   DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 64bit; Check: Is64BitInstallMode()
-Source: copying.txt;                       DestDir: {app}; Flags: ignoreversion
-Source: settings.txt;                      DestDir: {app}; Flags: ignoreversion
-Source: ReadMe.txt;                        DestDir: {app}; Flags: ignoreversion
+Source: {#bindir}\Release\Win32\lagarith.dll; DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 32bit
+Source: {#bindir}\Release\x64\lagarith.dll;   DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 64bit; Check: Is64BitInstallMode()
+Source: copying.txt;                          DestDir: {app}; Flags: ignoreversion
+Source: settings.txt;                         DestDir: {app}; Flags: ignoreversion
 
 
 [Registry]
@@ -69,6 +80,10 @@ FileName: {win}\system.ini; Section: drivers32; Key: VIDC.LAGS; String: lagarith
 
 [Run]
 Filename: {#WEBPAGE}; Description: Visit Webpage; Flags: nowait postinstall skipifsilent shellexec unchecked
+
+
+[InstallDelete]
+Type: files; Name: {app}\ReadMe.txt
 
 
 [Code]

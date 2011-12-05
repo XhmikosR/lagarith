@@ -346,7 +346,7 @@ void ConvertRGB24toYV12_SSE2(const unsigned char *src, unsigned char *ydest, uns
 			luma2 = _mm_packs_epi32(luma2,luma2);
 			luma0 = _mm_packus_epi16(luma0,luma0);
 			luma2 = _mm_packus_epi16(luma2,luma2);
-			unsigned int flipped_pos = (h-y-1)*w+x;
+			//unsigned int flipped_pos = (h-y-1)*w+x;
 
 			//if ( *(int *)&ydst[x]!=_mm_cvtsi128_si32(luma0)||
 			//	*(int *)&ydst[x-w]!=_mm_cvtsi128_si32(luma2) ){

@@ -15,7 +15,7 @@ IF NOT EXIST %InnoSetupPath% (
   GOTO END
 )
 
-CALL :SubInno
+CALL :SubInno %1
 
 
 :END
@@ -27,7 +27,7 @@ EXIT /B
 :SubInno
 ECHO.
 TITLE Building lagarith installer...
-"%InnoSetupPath%\iscc.exe" /Q "Lagarith_setup.iss"
+"%InnoSetupPath%\iscc.exe" /Q "Lagarith_setup.iss" /D%1
 IF %ERRORLEVEL% NEQ 0 (ECHO Build failed! & GOTO END) ELSE (ECHO Installer compiled successfully!)
 EXIT /B
 
