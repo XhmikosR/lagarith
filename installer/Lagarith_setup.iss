@@ -12,6 +12,7 @@
 
 #ifdef ICL12
   #define bindir "..\src\ICL12"
+  #define sse2_required
 #else
   #define bindir "..\src\VS2010"
 #endif
@@ -56,6 +57,26 @@ AllowCancelDuringInstall=no
 ArchitecturesInstallIn64BitMode=x64
 
 
+[Languages]
+Name: en; MessagesFile: compiler:Default.isl
+
+
+[Messages]
+BeveledLabel     =Lagarith {#LAG_VERSION}
+SetupAppTitle    =Setup - Lagarith
+SetupWindowTitle =Setup - Lagarith
+
+
+[CustomMessages]
+en.msg_DeleteSettings        =Do you also want to delete Lagarith's settings?%n%nIf you plan on installing Lagarith again then you do not have to delete them.
+en.msg_SetupIsRunningWarning =Lagarith setup is already running!
+#if defined(sse_required)
+en.msg_simd_sse              =This build of Lagarith requires a CPU with SSE extension support.%n%nYour CPU does not have those capabilities.
+#elif defined(sse2_required)
+en.msg_simd_sse2             =This build of Lagarith requires a CPU with SSE2 extension support.%n%nYour CPU does not have those capabilities.
+#endif
+
+
 [Files]
 Source: {#bindir}\Release\Win32\lagarith.dll; DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 32bit
 Source: {#bindir}\Release\x64\lagarith.dll;   DestDir: {sys}; Flags: sharedfile ignoreversion uninsnosharedfileprompt restartreplace 64bit; Check: Is64BitInstallMode()
@@ -87,6 +108,15 @@ Type: files; Name: {app}\ReadMe.txt
 
 
 [Code]
+// Global variables/constants and general functions
+const installer_mutex_name = 'lagarith' + '_setup_mutex';
+
+#if defined(sse_required) || defined(sse2_required)
+function IsProcessorFeaturePresent(Feature: Integer): Boolean;
+external 'IsProcessorFeaturePresent@kernel32.dll stdcall';
+#endif
+
+
 function IsUpgrade(): Boolean;
 var
   sPrevPath: String;
@@ -94,6 +124,24 @@ begin
   sPrevPath := WizardForm.PrevAppDir;
   Result := (sPrevPath <> '');
 end;
+
+
+#if defined(sse_required)
+function Is_SSE_Supported(): Boolean;
+begin
+  // PF_XMMI_INSTRUCTIONS_AVAILABLE
+  Result := IsProcessorFeaturePresent(6);
+end;
+
+#elif defined(sse2_required)
+
+function Is_SSE2_Supported(): Boolean;
+begin
+  // PF_XMMI64_INSTRUCTIONS_AVAILABLE
+  Result := IsProcessorFeaturePresent(10);
+end;
+
+#endif
 
 
 function ShouldSkipPage(PageID: Integer): Boolean;
@@ -106,6 +154,46 @@ begin
     else
       Result := False;
     end;
+  end;
+end;
+
+
+function InitializeSetup(): Boolean;
+begin
+  // Create a mutex for the installer and if it's already running then show a message and stop installation
+  if CheckForMutexes(installer_mutex_name) and not WizardSilent() then begin
+    SuppressibleMsgBox(CustomMessage('msg_SetupIsRunningWarning'), mbError, MB_OK, MB_OK);
+    Result := False;
+  end
+  else begin
+    Result := True;
+    CreateMutex(installer_mutex_name);
+
+#if defined(sse2_required)
+    if not Is_SSE2_Supported() then begin
+      SuppressibleMsgBox(CustomMessage('msg_simd_sse2'), mbCriticalError, MB_OK, MB_OK);
+      Result := False;
+    end;
+#elif defined(sse_required)
+    if not Is_SSE_Supported() then begin
+      SuppressibleMsgBox(CustomMessage('msg_simd_sse'), mbCriticalError, MB_OK, MB_OK);
+      Result := False;
+    end;
+#endif
+
+  end;
+end;
+
+
+function InitializeUninstall(): Boolean;
+begin
+  if CheckForMutexes(installer_mutex_name) then begin
+    SuppressibleMsgBox(CustomMessage('msg_SetupIsRunningWarning'), mbError, MB_OK, MB_OK);
+    Result := False;
+  end
+  else begin
+    Result := True;
+    CreateMutex(installer_mutex_name);
   end;
 end;
 
@@ -128,8 +216,7 @@ begin
   // When uninstalling ask user to delete Lagarith settings
   if CurUninstallStep = usUninstall then begin
     if RegKeyExists(HKEY_CURRENT_USER, 'Software\Lagarith') then begin
-      if SuppressibleMsgBox('Do you also want to delete Lagarith settings? If you plan on reinstalling Lagarith you do not have to delete them.',
-        mbConfirmation, MB_YESNO or MB_DEFBUTTON2, IDNO) = IDYES then begin
+      if SuppressibleMsgBox(CustomMessage('msg_DeleteSettings'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2, IDNO) = IDYES then begin
          RegDeleteKeyIncludingSubkeys(HKCU, 'Software\Lagarith');
       end;
     end;
@@ -137,4 +224,3 @@ begin
     DeleteFile(ExpandConstant('{win}\lagarith.ini'));
   end;
 end;
-
