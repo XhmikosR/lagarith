@@ -1,4 +1,4 @@
-//	Lagarith v1.3.25, copyright 2011 by Ben Greenwood.
+//	Lagarith v1.3.27, copyright 2011 by Ben Greenwood.
 //	http://lags.leetcode.net/codec.html
 //
 //	This program is free software; you can redistribute it and/or
@@ -225,16 +225,21 @@ For the RLE cases, the output is initally set to zero, and then the output
 pointer is advanced by the apropriate value when ever a run is detected in the
 decoder.
 */
-void CompressClass::Decode_And_DeRLE( const unsigned char * __restrict in, unsigned char * __restrict out, const unsigned int length,unsigned int level){
+void CompressClass::Decode_And_DeRLE( const unsigned char * __restrict in, unsigned char * __restrict out, const unsigned int length, unsigned int level){
 
+	
 	__assume(length>=2);
-    unsigned int low = (in[0]<<23)+(in[1]<<15)+(in[2]<<7)+(in[3]>>1);
+
+	unsigned int low = (in[0]<<23)+(in[1]<<15)+(in[2]<<7)+(in[3]>>1);
 	in+=3;
-    unsigned int range = TOP_VALUE;
+	unsigned int range = TOP_VALUE;
 	const unsigned char * ending = out+length;
 	const unsigned int range_top = prob_ranges[255];
 	const unsigned int range_bottom = prob_ranges[1];
 	const unsigned int shift = scale;
+
+	const unsigned char * start_in = in;
+	unsigned char * start_out = out;
 
 	//unsigned __int64 t1,t2;
 	//t1 = GetTime();
@@ -295,6 +300,7 @@ void CompressClass::Decode_And_DeRLE( const unsigned char * __restrict in, unsig
 		}
 	}
 
+
 	// The overhead for setting up range_hash and indexed_ranges is minimal,
 	// the break-even point is roughly 1000-2000 decoded symbols (or about 
 	// 300 bytes of typical compressed data). This is rare enough and fast
@@ -307,79 +313,75 @@ void CompressClass::Decode_And_DeRLE( const unsigned char * __restrict in, unsig
 		memset(out,0,length);
 	}
 
-	if ( level == 0 ){
-		// This is the simplest verion of the optimized range decoder to understand,
-		// since it does not have the RLE decoder rolled in.
-		do {
-			unsigned int help = range >> shift;
-			if ( low < help*range_bottom ){ // Decode a zero value, most common case
-				range = help * range_bottom;
-				*out++=0;
-			} else {
-				if ( low < range_top*help ){ // The value is > 0 and < 255
-					// Perform a reciprocal multiply to get tmp <= low/help.
-					// The value must be <= for the linear search to work.
-					int shifter=hash_shift;
-					int rb = range_bottom;
-					unsigned int s = help;
-					// If the value is too large for the r_table,
-					// do roughly (low/(help>>x))>>x, where x is how many
-					// places help got shifted to make it fall in the range.
-					while ( s >= 2048){
-						s+=3;// Round up divisor so result will be <= low/help.
-						s>>=2; // Shifting 2 places gave best performance in testing.
-						rb+=rb; // Shift up range_bottom so hash_shift can be merged with
-						rb+=rb; // the reciprocal correction shift.
-						shifter+=2;
-					}
-					// Perform a 64 bit reciprocal multiply, the top 32 bits are the desired result
-					int tmp = (int)(__emulu(low,reciprocal_table[s])>>32);
-					tmp -= rb;
-
-					// rounding errors will sometimes cause tmp to be < range_bottom,
-					// this is rare enough that a conditional is faster than masking.
-					if ( tmp < 0 )
-						tmp = 0;
-					// Use the hash table to find where to start the linear search.
-					tmp >>= shifter;
-					unsigned int x=range_hash[tmp];
-
-					// The linear search will correct for the error in the hash table
-					// and for reciprocal multiply results less than low/help.
-					while( (range = indexed_ranges[x+1][0]*help) <= low)
-						x=indexed_ranges[x+1][1];
-
-					// Update range and low based on decoded value; range has been
-					// set to indexed_ranges[x+1][0]*help in the linear search.
-					range -= help * indexed_ranges[x][0];
-					low -= help * indexed_ranges[x][0];
-					*out++=x;
+	try { 
+		if ( level == 0 ){
+			// This is the simplest verion of the optimized range decoder to understand,
+			// since it does not have the RLE decoder rolled in.
+			do {
+				unsigned int help = range >> shift;
+				if ( low < help*range_bottom ){ // Decode a zero value, most common case
+					range = help * range_bottom;
+					*out++=0;
 				} else {
-					// A value of 255 is handled here due to range being updated differently and
-					// because low can be greater than prob_ranges[256]*help in certain cases.
-					range -= help * range_top;
-					low -= help * range_top;
-					*out++=255;
+					if ( low < range_top*help ){ // The value is > 0 and < 255
+						// Perform a reciprocal multiply to get tmp <= low/help.
+						// The value must be <= for the linear search to work.
+						int shifter=hash_shift;
+						int rb = range_bottom;
+						unsigned int s = help;
+						// If the value is too large for the r_table,
+						// do roughly (low/(help>>x))>>x, where x is how many
+						// places help got shifted to make it fall in the range.
+						while ( s >= 2048){
+							s+=3;// Round up divisor so result will be <= low/help.
+							s>>=2; // Shifting 2 places gave best performance in testing.
+							rb+=rb; // Shift up range_bottom so hash_shift can be merged with
+							rb+=rb; // the reciprocal correction shift.
+							shifter+=2;
+						}
+						// Perform a 64 bit reciprocal multiply, the top 32 bits are the desired result
+						int tmp = (int)(__emulu(low,reciprocal_table[s])>>32);
+						tmp -= rb;
+
+						// rounding errors will sometimes cause tmp to be < range_bottom,
+						// this is rare enough that a conditional is faster than masking.
+						if ( tmp < 0 )
+							tmp = 0;
+						// Use the hash table to find where to start the linear search.
+						tmp >>= shifter;
+						unsigned int x=range_hash[tmp];
+
+						// The linear search will correct for the error in the hash table
+						// and for reciprocal multiply results less than low/help.
+						while( (range = indexed_ranges[x+1][0]*help) <= low)
+							x=indexed_ranges[x+1][1];
+
+						// Update range and low based on decoded value; range has been
+						// set to indexed_ranges[x+1][0]*help in the linear search.
+						range -= help * indexed_ranges[x][0];
+						low -= help * indexed_ranges[x][0];
+						*out++=x;
+					} else {
+						// A value of 255 is handled here due to range being updated differently and
+						// because low can be greater than prob_ranges[256]*help in certain cases.
+						range -= help * range_top;
+						low -= help * range_top;
+						*out++=255;
+					}
 				}
-			}
-			// If range has become too small, read in more bytes
-			CheckForRead();
-		} while ( out < ending );
-	} else  if ( level == 3 ){
+				// If range has become too small, read in more bytes
+				CheckForRead();
+			} while ( out < ending );
+		} else  if ( level == 3 ){
 	
-		unsigned int help = range >> shift;
-		if ( low < help*range_bottom ){
-			goto Level_3_Zero_Decode;
-		} else {
-			goto Level_3_Nonzero_Decode;
-		}
-		do {
-Level_3_Zero_Decode:
-			range = help * range_bottom;
-			out++;
-			CheckForRead();
-			help = range >> shift;
+			unsigned int help = range >> shift;
 			if ( low < help*range_bottom ){
+				goto Level_3_Zero_Decode;
+			} else {
+				goto Level_3_Nonzero_Decode;
+			}
+			do {
+	Level_3_Zero_Decode:
 				range = help * range_bottom;
 				out++;
 				CheckForRead();
@@ -389,101 +391,112 @@ Level_3_Zero_Decode:
 					out++;
 					CheckForRead();
 					help = range >> shift;
-
-					// a zero run was reached
 					if ( low < help*range_bottom ){
 						range = help * range_bottom;
-					} else {
-						DecodeNonZero(true);
+						out++;
+						CheckForRead();
+						help = range >> shift;
+
+						// a zero run was reached
+						if ( low < help*range_bottom ){
+							range = help * range_bottom;
+						} else {
+							DecodeNonZero(true);
+						}
+						// see if there is another zero run following
+						CheckForRead();
+						help = range >> shift;
+						if ( low < help*range_bottom && out < ending){
+							goto Level_3_Zero_Decode;
+						}
 					}
-					// see if there is another zero run following
-					CheckForRead();
-					help = range >> shift;
-					if ( low < help*range_bottom && out < ending){
-						goto Level_3_Zero_Decode;
-					}
 				}
-			}
-Level_3_Nonzero_Decode:
-			if ( out >= ending ){
-				break;
-			}
-			DecodeNonZero(false);
-			CheckForRead();
-			help = range >> shift;
-			if ( low < help*range_bottom ){
-				goto Level_3_Zero_Decode;
-			}
-			goto Level_3_Nonzero_Decode;
-		} while ( true );
-
-
-
-	} else if ( level == 1 ){
-		unsigned int help = range >> shift;
-		if ( low < help*range_bottom ){
-			goto Level_1_Zero_Decode;
-		} else {
-			goto Level_1_Nonzero_Decode;
-		}
-		do {
-Level_1_Zero_Decode:
-			range = help * range_bottom;
-			out++;
-			CheckForRead();
-			help = range >> shift;
-			// a zero run was reached
-			if ( low < help*range_bottom ){
-				range = help * range_bottom;
-			} else {
-				DecodeNonZero(true);
-			}
-
-			// see if there is another zero run following
-			CheckForRead();
-			help = range >> shift;
-			if ( out < ending ){
+	Level_3_Nonzero_Decode:
+				if ( out >= ending ){
+					break;
+				}
+				DecodeNonZero(false);
+				CheckForRead();
+				help = range >> shift;
 				if ( low < help*range_bottom ){
-					goto Level_1_Zero_Decode;
+					goto Level_3_Zero_Decode;
 				}
-			} else {
-				break;
-			}
-Level_1_Nonzero_Decode:
-			DecodeNonZero(false);
-			CheckForRead();
-			help = range >> shift;
-			if ( out < ending ){
-				if ( low < help*range_bottom ){
-					goto Level_1_Zero_Decode;
-				}
-				goto Level_1_Nonzero_Decode;
-			} else {
-				break;
-			}
-		} while ( true );
+				goto Level_3_Nonzero_Decode;
+			} while ( true );
 
 
 
-	} else if ( level == 2 ){ 
-		// less optimized since it is not used in recent builds
-		unsigned int run=0;
-		do {
-			CheckForRead();
+		} else if ( level == 1 ){
 			unsigned int help = range >> shift;
 			if ( low < help*range_bottom ){
+				goto Level_1_Zero_Decode;
+			} else {
+				goto Level_1_Nonzero_Decode;
+			}
+			do {
+	Level_1_Zero_Decode:
 				range = help * range_bottom;
-				if ( run < 2){
-					out++;
-					run++;
+				out++;
+				CheckForRead();
+				help = range >> shift;
+				// a zero run was reached
+				if ( low < help*range_bottom ){
+					range = help * range_bottom;
 				} else {
+					DecodeNonZero(true);
+				}
+
+				// see if there is another zero run following
+				CheckForRead();
+				help = range >> shift;
+				if ( out < ending ){
+					if ( low < help*range_bottom ){
+						goto Level_1_Zero_Decode;
+					}
+				} else {
+					break;
+				}
+	Level_1_Nonzero_Decode:
+				DecodeNonZero(false);
+				CheckForRead();
+				help = range >> shift;
+				if ( out < ending ){
+					if ( low < help*range_bottom ){
+						goto Level_1_Zero_Decode;
+					}
+					goto Level_1_Nonzero_Decode;
+				} else {
+					break;
+				}
+			} while ( true );
+
+
+
+		} else if ( level == 2 ){ 
+			// less optimized since it is not used in recent builds
+			unsigned int run=0;
+			do {
+				CheckForRead();
+				unsigned int help = range >> shift;
+				if ( low < help*range_bottom ){
+					range = help * range_bottom;
+					if ( run < 2){
+						out++;
+						run++;
+					} else {
+						run=0;
+					}
+				} else {
+					DecodeNonZero( run==2 );
 					run=0;
 				}
-			} else {
-				DecodeNonZero( run==2 );
-				run=0;
-			}
-		} while ( out < ending );
+			} while ( out < ending );
+		}
+	} catch ( ... ){
+		// it may be possible for the last read of the byte sequence to cause a buffer overrun. I haven't
+		// been able to reproduce this but it seems plausible based on some crash reports.
+
+		//MessageBox (HWND_DESKTOP, "Exception caught in Decode_And_DeRLE", "Error", MB_OK | MB_ICONEXCLAMATION);
 	}
 
 	/*t2 = GetTime();

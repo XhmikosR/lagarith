@@ -1,7 +1,7 @@
 ;#define ICL12
 
-#define LAG_VERSION       "1.3.26"
-#define LAG_VERSION_SHORT "1326"
+#define LAG_VERSION       "1.3.27"
+#define LAG_VERSION_SHORT "1327"
 #define PUBLISHER         "Ben Greenwood"
 #define WEBPAGE           "http://lags.leetcode.net/codec.html"
 

@@ -1,4 +1,4 @@
-//	Lagarith v1.3.25, copyright 2011 by Ben Greenwood.
+//	Lagarith v1.3.27, copyright 2011 by Ben Greenwood.
 //	http://lags.leetcode.net/codec.html
 //
 //	This program is free software; you can redistribute it and/or
@@ -135,7 +135,7 @@ unsigned int FibonacciDecode(const unsigned char * in, unsigned int * out){
 	unsigned int pos =0;
 	unsigned int bit;
 	unsigned int bitpos = 0x80;
-	unsigned int series[]={1,2,3,5,8,13};
+	unsigned int series[]={1,2,3,5,8,13,21};
 
 	for ( unsigned int b =0; b < 256; b++ ){
 		bit =0;

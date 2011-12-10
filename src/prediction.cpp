@@ -2027,7 +2027,6 @@ void Decorrilate_And_Split_RGB32( const unsigned char * __restrict in, unsigned 
 	}
 }
 
-
 void Decorrilate_And_Split_RGBA( const unsigned char * __restrict in, unsigned char * __restrict rdst, unsigned char * __restrict gdst, unsigned char * __restrict bdst, unsigned char * __restrict adst, const unsigned int width, const unsigned int height, Performance * performance){
 	if ( SSE2 ){
 		Select_Fastest(
@@ -2073,7 +2072,7 @@ void Interleave_And_Restore_RGB24( unsigned char * __restrict out, const unsigne
 }
 
 void Interleave_And_Restore_RGB32( unsigned char * __restrict out, const unsigned char * __restrict rsrc, const unsigned char * __restrict gsrc, const unsigned char * __restrict bsrc, const unsigned int width, const unsigned int height, Performance * performance){
-	if ( SSE2 ){
+	if ( SSE2 && ((unsigned int)out&15)==0 ){
 		Select_Fastest(
 			Interleave_And_Restore_RGB32_SSE2(out,rsrc,gsrc,bsrc,width,height),
 			Interleave_And_Restore_RGB32_MMX(out,rsrc,gsrc,bsrc,width,height)
@@ -2084,7 +2083,7 @@ void Interleave_And_Restore_RGB32( unsigned char * __restrict out, const unsigne
 }
 
 void Interleave_And_Restore_RGBA( unsigned char * __restrict out, const unsigned char * __restrict rsrc, const unsigned char * __restrict gsrc, const unsigned char * __restrict bsrc, const unsigned char * __restrict asrc, const unsigned int width, const unsigned int height, Performance * performance){
-	if ( SSE2 ){
+	if ( SSE2 && ((unsigned int)out&15)==0){
 		Select_Fastest(
 			Interleave_And_Restore_RGBA_SSE2(out,rsrc,gsrc,bsrc,asrc,width,height),
 			Interleave_And_Restore_RGBA_MMX(out,rsrc,gsrc,bsrc,asrc,width,height)

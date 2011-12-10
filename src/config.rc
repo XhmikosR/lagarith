@@ -66,9 +66,9 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,7,31,117,10
     PUSHBUTTON      "View Homepage",IDC_HOMEPAGE,20,98,60,15
 #ifdef X64_BUILD
-    LTEXT           "Version 1.3.26 (64 Bit)",IDC_VERSION,160,0,100,10
+    LTEXT           "Version 1.3.27 (64 Bit)",IDC_VERSION,160,0,100,10
 #else
-	LTEXT			"Version 1.3.26",IDC_VERSION,185,0,100,10
+    LTEXT           "Version 1.3.27",IDC_VERSION,184,0,100,10
 #endif
     CONTROL         "Use Multithreading",IDC_MULTI,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,7,51,75,10
@@ -104,8 +104,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,3,26,0
- PRODUCTVERSION 1,3,26,0
+ FILEVERSION 1,3,27,0
+ PRODUCTVERSION 1,3,27,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -123,14 +123,14 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", " \0"
             VALUE "FileDescription", "Lagarith\0"
-            VALUE "FileVersion", "1.3.26\0"
+            VALUE "FileVersion", "1.3.27\0"
             VALUE "InternalName", "Lagarith\0"
             VALUE "LegalCopyright", "Copyright © 2011\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "lagarith.dll\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Lagarith\0"
-            VALUE "ProductVersion", "1.3.26\0"
+            VALUE "ProductVersion", "1.3.27\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -155,7 +155,7 @@ BEGIN
     IDS_TIP_MULTI           "Use multiple threads to compress/decompress video; this can improve speed on systems that have multiple processors.\nSingle processor systems should leave this disabled."
     IDS_TIP_INTERLACED      " "
     IDS_TIP_LOSSY_OPTION    "This allows the user to downsample video before it is compressed. Selecting a colorspace will force all colorspaces above it to be downsampled; lower colorspaces will not be affected. Downsampling is somewhat lossy."
-    IDS_TIP_NOUPSAMPLE		"This will force the codec to decode video as the same colorspace it is stored as internally. This can improve performance and prevent rounding errors, but may not be compatible with certain programs."
+    IDS_TIP_NOUPSAMPLE      "This will force the codec to decode video as the same colorspace it is stored as internally. This can improve performance and prevent rounding errors, but may not be compatible with certain programs."
 END
 
 #endif    // English (U.S.) resources

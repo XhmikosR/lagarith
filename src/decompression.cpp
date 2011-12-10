@@ -1,4 +1,4 @@
-//	Lagarith v1.3.25, copyright 2011 by Ben Greenwood.
+//	Lagarith v1.3.27, copyright 2011 by Ben Greenwood.
 //	http://lags.leetcode.net/codec.html
 //
 //	This program is free software; you can redistribute it and/or

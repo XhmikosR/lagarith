@@ -147,11 +147,6 @@ int CodecInst::InitThreads( int encode ){
 	threads[0].buffer=NULL;
 	threads[1].buffer=NULL;
 	threads[2].buffer=NULL;
-#ifdef _DEBUG 
-	//threads[0].name="Thread A";
-	//threads[1].name="Thread B";
-	//threads[2].name="Thread C";
-#endif
 
 	int buffer_size = align_round(threads[0].width,16)*threads[0].height+256;
 
