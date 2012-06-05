@@ -5,8 +5,8 @@
 #define PUBLISHER         "Ben Greenwood"
 #define WEBPAGE           "http://lags.leetcode.net/codec.html"
 
-#if VER < 0x05040200
-  #error Update your Inno Setup version
+#if VER < EncodeVer(5,5,0)
+  #error Update your Inno Setup version (5.5.0 or newer)
 #endif
 
 
@@ -46,7 +46,7 @@ OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}_ICL12
 OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}
 #endif
 UninstallDisplayName=Lagarith Lossless Codec [{#LAG_VERSION}]
-MinVersion=0,5.1
+MinVersion=5.1
 SolidCompression=yes
 Compression=lzma/ultra64
 InternalCompressLevel=max
