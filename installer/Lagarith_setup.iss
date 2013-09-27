@@ -5,16 +5,16 @@
 #define PUBLISHER         "Ben Greenwood"
 #define WEBPAGE           "http://lags.leetcode.net/codec.html"
 
-#if VER < EncodeVer(5,5,1)
-  #error Update your Inno Setup version (5.5.1 or newer)
+#if VER < EncodeVer(5,5,3)
+  #error Update your Inno Setup version (5.5.3 or newer)
 #endif
 
 
 #ifdef ICL12
-  #define bindir "..\src\ICL12"
+  #define bindir "..\src\ICL13"
   #define sse2_required
 #else
-  #define bindir "..\src\VS2010"
+  #define bindir "..\src\VS2012"
 #endif
 
 
@@ -40,13 +40,17 @@ VersionInfoProductTextVersion={#LAG_VERSION}
 DefaultDirName={pf}\Lagarith Lossless Codec
 InfoBeforeFile=copying.txt
 OutputDir=.
-#ifdef ICL12
-OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}_ICL12
+#ifdef ICL13
+OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}_ICL13
 #else
 OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}
 #endif
 UninstallDisplayName=Lagarith Lossless Codec [{#LAG_VERSION}]
+#ifdef ICL13
+MinVersion=6.0
+#else
 MinVersion=5.1
+#endif
 SolidCompression=yes
 Compression=lzma/ultra64
 InternalCompressLevel=max
