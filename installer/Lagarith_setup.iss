@@ -1,5 +1,3 @@
-;#define ICL13
-
 #define LAG_VERSION       "1.3.27"
 #define LAG_VERSION_SHORT "1327"
 #define PUBLISHER         "Ben Greenwood"
@@ -9,13 +7,7 @@
   #error Update your Inno Setup version (5.5.4 or newer)
 #endif
 
-
-#ifdef ICL13
-  #define bindir "..\src\ICL13"
-  #define sse2_required
-#else
-  #define bindir "..\src\VS2013"
-#endif
+#define bindir "..\src\VS2013"
 
 
 [Setup]
@@ -40,17 +32,9 @@ VersionInfoProductTextVersion={#LAG_VERSION}
 DefaultDirName={pf}\Lagarith Lossless Codec
 InfoBeforeFile=copying.txt
 OutputDir=.
-#ifdef ICL13
-OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}_ICL13
-#else
 OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}
-#endif
 UninstallDisplayName=Lagarith Lossless Codec [{#LAG_VERSION}]
-#ifdef ICL13
-MinVersion=6.0
-#else
 MinVersion=5.1
-#endif
 SolidCompression=yes
 Compression=lzma/ultra64
 InternalCompressLevel=max
