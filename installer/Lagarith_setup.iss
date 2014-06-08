@@ -1,16 +1,16 @@
-;#define ICL12
+;#define ICL13
 
 #define LAG_VERSION       "1.3.27"
 #define LAG_VERSION_SHORT "1327"
 #define PUBLISHER         "Ben Greenwood"
 #define WEBPAGE           "http://lags.leetcode.net/codec.html"
 
-#if VER < EncodeVer(5,5,3)
-  #error Update your Inno Setup version (5.5.3 or newer)
+#if VER < EncodeVer(5,5,4)
+  #error Update your Inno Setup version (5.5.4 or newer)
 #endif
 
 
-#ifdef ICL12
+#ifdef ICL13
   #define bindir "..\src\ICL13"
   #define sse2_required
 #else
