@@ -1,0 +1,10 @@
+*.aps
+*.opensdf
+*.sdf
+*.suo
+*.user
+/installer/*.exe
+/src/ICL13
+/src/VS2012
+/src/VS2013
+ipch
