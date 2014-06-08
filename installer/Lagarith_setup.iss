@@ -14,7 +14,7 @@
   #define bindir "..\src\ICL13"
   #define sse2_required
 #else
-  #define bindir "..\src\VS2012"
+  #define bindir "..\src\VS2013"
 #endif
 
 
