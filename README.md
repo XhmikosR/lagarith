@@ -23,9 +23,11 @@ identical to the current, the current frame is discarded and the decoder will si
 previous frame again.
 
 Requirements:
+
 * Windows XP SP3 or newer
 * An SSE capable CPU
 
 Notes:
+
 * This is just an Git mirror I set up and nothing more, no code changes.
 * All credits goes to the Lagarith developer.

@@ -1,9 +1,11 @@
 *.aps
+*.opendb
 *.opensdf
 *.sdf
 *.suo
 *.user
-/installer/*.exe
-/src/VS2012
-/src/VS2013
-ipch
+*.VC.db
+.vs/
+installer/*.exe
+ipch/
+src/VS2015/
