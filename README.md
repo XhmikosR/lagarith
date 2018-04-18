@@ -22,12 +22,19 @@ Additionally, Lagarith has support for null frames; if the previous frame is mat
 identical to the current, the current frame is discarded and the decoder will simply use the
 previous frame again.
 
-Requirements:
+---
 
-* Windows XP SP3 or newer
-* An SSE capable CPU
+## Build Requirements:
 
-Notes:
+* MSVC 2017
+* [YASM](http://yasm.tortall.net/Download.html) somewhere in your `%PATH%`
 
-* This is just an Git mirror I set up and nothing more, no code changes.
+## Runtime Requirements:
+
+* Windows Vista or newer
+* An SSE2 capable CPU
+
+## Notes:
+
+* This is just a Git mirror I set up and nothing more, no code changes.
 * All credits goes to the Lagarith developer.

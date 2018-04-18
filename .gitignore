@@ -8,4 +8,4 @@
 .vs/
 installer/*.exe
 ipch/
-src/VS2015/
+src/VS2017/

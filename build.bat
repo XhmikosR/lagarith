@@ -2,10 +2,6 @@
 SETLOCAL ENABLEEXTENSIONS
 CD /D %~dp0
 
-rem Check the building environment
-IF NOT DEFINED VS140COMNTOOLS CALL :SUBMSG "ERROR" "Visual Studio 2012 NOT FOUND!"
-
-
 rem Check for the help switches
 IF /I "%~1" == "help"   GOTO SHOWHELP
 IF /I "%~1" == "/help"  GOTO SHOWHELP
@@ -64,19 +60,22 @@ IF "%~2" == "" (
 
 
 :START
+CALL :SubVSPath
+IF NOT EXIST "%VS_PATH%" CALL :SUBMSG "ERROR" "Visual Studio 2017 NOT FOUND!"
+
 IF "%ARCH%" == "x64" GOTO x64
 IF "%ARCH%" == "x86" GOTO x86
 
 
 :x86
-CALL "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x86
+CALL "%VS_PATH%\Common7\Tools\vsdevcmd" -no_logo -arch=x86
 CALL :SUBMSVC %BUILDTYPE% Release x86
 IF "%ARCH%" == "x86" GOTO END
 
 
 :x64
 IF DEFINED PROGRAMFILES(x86) (SET build_type=amd64) ELSE (SET build_type=x86_amd64)
-CALL "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" %build_type%
+CALL "%VS_PATH%\Common7\Tools\vsdevcmd" -no_logo -arch=%build_type%
 CALL :SUBMSVC %BUILDTYPE% Release x64
 
 
@@ -93,7 +92,9 @@ EXIT /B
 :SUBMSVC
 ECHO.
 TITLE Building lagarith - %~1 "%~2|%~3"...
-devenv /nologo lagarith.sln /%~1 "%~2|%~3"
+SET "MSBUILD_SWITCHES=/nologo /consoleloggerparameters:Verbosity=minimal /maxcpucount /nodeReuse:true"
+MSBuild.exe lagarith.sln %MSBUILD_SWITCHES%^
+ /target:%~1 /property:Configuration=%~2;Platform=%3
 IF %ERRORLEVEL% NEQ 0 CALL :SUBMSG "ERROR" "Compilation failed!"
 EXIT /B
 
@@ -117,6 +118,10 @@ ECHO.
 ENDLOCAL
 EXIT /B
 
+
+:SubVSPath
+FOR /f "delims=" %%A IN ('"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -property installationPath -latest -requires Microsoft.Component.MSBuild Microsoft.VisualStudio.Component.VC.ATLMFC Microsoft.VisualStudio.Component.VC.Tools.x86.x64') DO SET "VS_PATH=%%A"
+EXIT /B
 
 :SUBMSG
 ECHO. & ECHO ______________________________

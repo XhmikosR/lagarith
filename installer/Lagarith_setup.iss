@@ -1,5 +1,4 @@
 #define LAG_VERSION       "1.3.27"
-#define LAG_VERSION_SHORT "1327"
 #define PUBLISHER         "Ben Greenwood"
 #define WEBPAGE           "http://lags.leetcode.net/codec.html"
 
@@ -7,7 +6,8 @@
   #error Update your Inno Setup version (5.5.9 or newer)
 #endif
 
-#define bindir "..\src\VS2015"
+#define bindir "..\src\VS2017"
+#define sse2_required
 
 
 [Setup]
@@ -32,9 +32,9 @@ VersionInfoProductTextVersion={#LAG_VERSION}
 DefaultDirName={pf}\Lagarith Lossless Codec
 InfoBeforeFile=copying.txt
 OutputDir=.
-OutputBaseFilename=LagarithSetup_{#LAG_VERSION_SHORT}
+OutputBaseFilename=LagarithSetup_{#LAG_VERSION}
 UninstallDisplayName=Lagarith Lossless Codec [{#LAG_VERSION}]
-MinVersion=5.1
+MinVersion=6.0
 SolidCompression=yes
 Compression=lzma/ultra64
 InternalCompressLevel=max
